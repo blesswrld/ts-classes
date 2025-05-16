@@ -1,14 +1,26 @@
 class Box {
     // Оператор ! (восклицания) убирает предупреждение от конструктора
     // width!: number;
-    // Второй вариант глобальный, нужно поставить в false параметр strictPropertyInitialization (ts.config.json)
-    // Передаём свойства в класс
-    width: number;
-    height: number;
 
-    constructor(width: number) {
-        // Передаём значение width, height
-        this.width = width;
+    // Второй вариант глобальный, нужно поставить в false параметр strictPropertyInitialization (ts.config.json)
+
+    // Передаём свойства в класс
+    width: number; // Тип данных свойства width
+    height: number; // Тип данных свойства height
+    volume: string; // Тип данных свойства volume
+
+    // Конструкторы
+    constructor(volume: string);
+    constructor(width: number);
+    constructor(widthOrVolume: number | string) {
+        // Условие
+        if (typeof widthOrVolume === "number") {
+            this.width = widthOrVolume; // Новое значение для перегрузки, ширина или объем
+        } else {
+            this.volume = widthOrVolume;
+        }
+        // super();
+        // Передаём значение height
         this.height = 500;
     }
 }
