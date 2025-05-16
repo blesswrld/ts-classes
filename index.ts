@@ -49,16 +49,22 @@ class Box {
     }
     // Пара методов
     // getter
-    get content() {
-        // Получаем this.content
-        return this._content;
-    }
+    // get content() {
+    //     // Получаем this.content
+    //     return this._content;
+    // }
 
-    // Принимаем значение value
-    // setter
-    set content(value) {
-        // Вывод даты значение которой будет value из content = "Test"
-        this._content = `Date: ${new Date().toTimeString()}, Content: ${value}`;
+    // // Принимаем значение value
+    // // setter
+    // set content(value) {
+    //     // Вывод даты значение которой будет value из content = "Test"
+    //     this._content = `Date: ${new Date().toTimeString()}, Content: ${value}`;
+    // }
+
+    // Ассинхронная функция
+    async content(value: string) {
+        const date = await new Date().toTimeString();
+        this._content = `Date: ${date}, Content: ${value}`;
     }
 }
 
