@@ -8,7 +8,7 @@ class Box {
     width: number; // Тип данных свойства width = number
     height: number; // Тип данных свойства height = number
     volume: number | undefined; // Тип данных свойства volume = number | undefined
-    content: string | undefined; // Тип данных свойства content = string | undefined
+    _content: string | undefined; // Тип данных свойства content = string | undefined
 
     // Конструктор с аргументами (volume?, content? - необязательны)
     constructor(width: number, volume?: number, content?: string) {
@@ -16,7 +16,7 @@ class Box {
         // Передаём значение width, height, volume, content
         this.width = width;
         this.volume = volume;
-        this.content = content;
+        this._content = content;
         this.height = 500;
     }
 
@@ -47,10 +47,26 @@ class Box {
             return transport.some((t) => t >= this.width) ? "Ok" : "Not ok";
         }
     }
+    // Пара методов
+    // getter
+    get content() {
+        // Получаем this.content
+        return this._content;
+    }
+
+    // Принимаем значение value
+    // setter
+    set content(value) {
+        // Вывод даты значение которой будет value из content = "Test"
+        this._content = `Date: ${new Date().toTimeString()}, Content: ${value}`;
+    }
 }
 
 // Экземпляр класса
 const firstBox = new Box(250);
+// Устанавливаем значение для объёма
+firstBox.volume = 50000;
+
 // Вывод в консоль
 // OK
 console.log(firstBox.checkBoxSize([200, 500]));
@@ -58,6 +74,9 @@ console.log(firstBox.checkBoxSize([200, 500]));
 // console.log(firstBox.checkBoxSize(240));
 // OK
 // console.log(firstBox.checkBoxSize(270));
+
+console.log((firstBox.content = "Test")); // Устанавливаем значение "Test"
+console.log(firstBox.content); // Обращаемся к свойству для получения содержимого экземпляра content
 
 // class User {
 //     name: string;
