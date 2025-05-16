@@ -4,17 +4,46 @@ class Box {
     // width!: number;
     // Второй вариант глобальный, нужно поставить в false параметр strictPropertyInitialization (ts.config.json)
     // Передаём свойства в класс
-    width;
-    height;
-    constructor(width) {
-        // Передаём значение width, height
+    width; // Тип данных свойства width = number
+    height; // Тип данных свойства height = number
+    volume; // Тип данных свойства volume = number | undefined
+    content; // Тип данных свойства content = string | undefined
+    // Конструктор с аргументами (volume?, content? - необязательны)
+    constructor(width, volume, content) {
+        // super();
+        // Передаём значение width, height, volume, content
         this.width = width;
+        this.volume = volume;
+        this.content = content;
         this.height = 500;
+    }
+    // Метод для рассчета объёма
+    calculateVolume() {
+        // Условие
+        if (!this.volume) {
+            // Вычисляем значение ширина * на высоту
+            this.volume = this.width * this.height;
+            // Вывод в консоль
+            console.log(`Объём посылки: ${this.volume}`);
+        }
+        else {
+            console.log(`Объём посылки: ${this.volume}`);
+        }
     }
 }
 // Экземпляр класса
 const firstBox = new Box(250);
+// Вывод в консоль
 console.log(firstBox);
+class User {
+    name;
+}
+// Создаём нового пользователя
+const Tamerlan = new User();
+// Устанавливаем имя для пользователя
+Tamerlan.name = "Tamerlan";
+// Вывод в консоль
+console.log(Tamerlan);
 // tsc index.ts (команда в терминале для запуска компилятора ts кода)
 // tsc -help (команда в терминале для помощи с настройками)
 // ts-node index.ts (команда для запуска ноды + ts файл -- удобно для быстрого вывода в консоль)

@@ -5,30 +5,39 @@ class Box {
     // Второй вариант глобальный, нужно поставить в false параметр strictPropertyInitialization (ts.config.json)
 
     // Передаём свойства в класс
-    width: number; // Тип данных свойства width
-    height: number; // Тип данных свойства height
-    volume: string; // Тип данных свойства volume
+    width: number; // Тип данных свойства width = number
+    height: number; // Тип данных свойства height = number
+    volume: number | undefined; // Тип данных свойства volume = number | undefined
+    content: string | undefined; // Тип данных свойства content = string | undefined
 
-    // Конструкторы
-    constructor(volume: string);
-    constructor(width: number);
-    constructor(widthOrVolume: number | string) {
-        // Условие
-        if (typeof widthOrVolume === "number") {
-            this.width = widthOrVolume; // Новое значение для перегрузки, ширина или объем
-        } else {
-            this.volume = widthOrVolume;
-        }
+    // Конструктор с аргументами (volume?, content? - необязательны)
+    constructor(width: number, volume?: number, content?: string) {
         // super();
-        // Передаём значение height
+        // Передаём значение width, height, volume, content
+        this.width = width;
+        this.volume = volume;
+        this.content = content;
         this.height = 500;
+    }
+
+    // Метод для рассчета объёма
+    calculateVolume(): void {
+        // Условие
+        if (!this.volume) {
+            // Вычисляем значение ширина * на высоту
+            this.volume = this.width * this.height;
+            // Вывод в консоль
+            console.log(`Объём посылки: ${this.volume}`);
+        } else {
+            console.log(`Объём посылки: ${this.volume}`);
+        }
     }
 }
 
 // Экземпляр класса
 const firstBox = new Box(250);
 // Вывод в консоль
-console.log(firstBox);
+console.log(firstBox.calculateVolume());
 
 class User {
     name: string;
