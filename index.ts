@@ -32,23 +32,43 @@ class Box {
             console.log(`Объём посылки: ${this.volume}`);
         }
     }
+
+    // Несколько вариантов значений для метода checkBoxSize (overloading)
+    checkBoxSize(transport: number): string;
+    checkBoxSize(transport: number[]): string;
+    // Метод для проверки размера посылки
+    checkBoxSize(transport: number | number[]): string {
+        // Условие
+        if (typeof transport === "number") {
+            // Проверяем размер ширины бокса (если размер транспорта больше либо равен ширине бокса) выводи "Ok" в плохом случае "Not ok"
+            return transport >= this.width ? "Ok" : "Not ok";
+        } else {
+            // Если хотя бы один транспорт подходит по размеру для бокса то выводим "Ok" в плохом случае "Not ok"
+            return transport.some((t) => t >= this.width) ? "Ok" : "Not ok";
+        }
+    }
 }
 
 // Экземпляр класса
 const firstBox = new Box(250);
 // Вывод в консоль
-console.log(firstBox.calculateVolume());
+// OK
+console.log(firstBox.checkBoxSize([200, 500]));
+// Not ok
+// console.log(firstBox.checkBoxSize(240));
+// OK
+// console.log(firstBox.checkBoxSize(270));
 
-class User {
-    name: string;
-}
+// class User {
+//     name: string;
+// }
 
-// Создаём нового пользователя
-const Tamerlan = new User();
-// Устанавливаем имя для пользователя
-Tamerlan.name = "Tamerlan";
-// Вывод в консоль
-console.log(Tamerlan);
+// // Создаём нового пользователя
+// const Tamerlan = new User();
+// // Устанавливаем имя для пользователя
+// Tamerlan.name = "Tamerlan";
+// // Вывод в консоль
+// console.log(Tamerlan);
 
 // tsc index.ts (команда в терминале для запуска компилятора ts кода)
 // tsc -help (команда в терминале для помощи с настройками)
