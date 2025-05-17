@@ -6,7 +6,7 @@ class Box {
 
     // Передаём свойства в класс
     width: number; // Тип данных свойства width = number
-    height: number; // Тип данных свойства height = number
+    height: number = 500; // Тип данных свойства height = number с начальным значением 500
     volume: number | undefined; // Тип данных свойства volume = number | undefined
     _content: string | undefined; // Тип данных свойства content = string | undefined
 
@@ -17,7 +17,7 @@ class Box {
         this.width = width;
         this.volume = volume;
         this._content = content;
-        this.height = 500;
+        this.height;
     }
 
     // Метод для рассчета объёма
@@ -83,6 +83,19 @@ console.log(firstBox.checkBoxSize([200, 500]));
 
 console.log((firstBox.content = "Test")); // Устанавливаем значение "Test"
 console.log(firstBox.content); // Обращаемся к свойству для получения содержимого экземпляра content
+
+// Класс со стилями
+class Styles {
+    // свойство будет являться (string) и значение (string),
+    // или функцией во втором формате
+    [s: string]: string | ((s: string) => boolean);
+
+    /* method() {} */
+}
+
+const style = new Styles();
+style.color = "red";
+style.font = "Roboto";
 
 // class User {
 //     name: string;
