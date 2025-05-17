@@ -47,24 +47,14 @@ class Box {
             return transport.some((t) => t >= this.width) ? "Ok" : "Not ok";
         }
     }
-    // Пара методов
-    // getter
-    // get content() {
-    //     // Получаем this.content
-    //     return this._content;
-    // }
-
-    // // Принимаем значение value
-    // // setter
-    // set content(value) {
-    //     // Вывод даты значение которой будет value из content = "Test"
-    //     this._content = `Date: ${new Date().toTimeString()}, Content: ${value}`;
-    // }
 
     // Ассинхронная функция
     async content(value: string) {
         const date = await new Date().toTimeString();
         this._content = `Date: ${date}, Content: ${value}`;
+        // Вывод в консоль
+        console.log(this._content);
+        // return this._content;
     }
 }
 
@@ -81,32 +71,43 @@ console.log(firstBox.checkBoxSize([200, 500]));
 // OK
 // console.log(firstBox.checkBoxSize(270));
 
-console.log((firstBox.content = "Test")); // Устанавливаем значение "Test"
-console.log(firstBox.content); // Обращаемся к свойству для получения содержимого экземпляра content
+// console.log((firstBox.content = "Test")); // Устанавливаем значение "Test"
+// console.log(firstBox.content); // Обращаемся к свойству для получения содержимого экземпляра content
 
-// Класс со стилями
-class Styles {
-    // свойство будет являться (string) и значение (string),
-    // или функцией во втором формате
-    [s: string]: string | ((s: string) => boolean);
+class PresentBox extends Box {
+    wrap: string;
+    height: number = 600; // присваиваем значение в 600
 
-    /* method() {} */
+    constructor(wrap: string, width: number) {
+        // super() для наследования свойств родительского класса
+        super(width);
+        this.wrap = wrap;
+    }
+
+    // Ассинхронная функция
+    // Переписываем старый метод с помощью override
+    override async content(value: string, text?: string) {
+        const date = await new Date().toTimeString();
+
+        // Условие
+        if (!text) {
+            // Если текста нету, берём значение из родительского класса
+            super.content(value);
+        } else {
+            // Иначе вызываем эту строку
+            this._content = `Date: ${date}, Content: ${value}, Text: ${
+                text ? text : "No text"
+            }`;
+        }
+
+        // Вывод в консоль
+        console.log(this._content);
+        // return this._content;
+    }
 }
 
-const style = new Styles();
-style.color = "red";
-style.font = "Roboto";
-
-// class User {
-//     name: string;
-// }
-
-// // Создаём нового пользователя
-// const Tamerlan = new User();
-// // Устанавливаем имя для пользователя
-// Tamerlan.name = "Tamerlan";
-// // Вывод в консоль
-// console.log(Tamerlan);
+// Новый экземпляр класса
+new PresentBox("red", 500).content("TV", "Gift");
 
 // tsc index.ts (команда в терминале для запуска компилятора ts кода)
 // tsc -help (команда в терминале для помощи с настройками)
