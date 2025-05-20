@@ -1,114 +1,140 @@
-class Box {
-    // Оператор ! (восклицания) убирает предупреждение от конструктора
-    // width!: number;
+interface Queue<T> {
+    enqueue(item: T): void; // поставить в очередь
+    dequeue(): T | undefined; // исключить из очереди
+    peek(): T | undefined | null; // посмотреть первый элемент
+    isEmpty(): boolean; // проверка на "пустоту" сущности
+    length(): number; // проверка на длину
+}
 
-    // Второй вариант глобальный, нужно поставить в false параметр strictPropertyInitialization (ts.config.json)
+// Реализация очереди через массив
+// Класс ArrayQueue должен имплементировать интерфейс Queue
+// Класс может работать с любым типом данных, то есть помещать любые данные в массив  <-- Важно
 
-    // Передаём свойства в класс
-    width: number; // Тип данных свойства width = number
-    height: number = 500; // Тип данных свойства height = number с начальным значением 500
-    volume: number | undefined; // Тип данных свойства volume = number | undefined
-    _content: string | undefined; // Тип данных свойства content = string | undefined
+// Очередь - это структура данных, которая выглядит как реальная очередь в магазине
+// Первый, кто подошел к прилавку, первым и уйдет. Так же и в коде при выполнении задач
+// Чуть подробнее можно найти в википедии или на других сайтах по поиску "Очередь структура данных"
 
-    // Конструктор с аргументами (volume?, content? - необязательны)
-    constructor(width: number, volume?: number, content?: string) {
-        // super();
-        // Передаём значение width, height, volume, content
-        this.width = width;
-        this.volume = volume;
-        this._content = content;
-        this.height;
+class ArrayQueue<T> implements Queue<T> {
+    // Создать приватное свойство queue, которое по умолчанию массив и содержит массив любого типа
+    // Подсказка по методам:
+    // при добавлении в очередь можно выполнить метод push
+    // при удалении - shift, так как нужно удалить первый элемент.
+    // Обратите внимание на возвращаемое значение
+    // isEmpty может использоваться в других методах
+    private queue: T[] = [];
+
+    enqueue(item: T): void {
+        this.queue.push(item);
+    } // поставить в очередь
+    dequeue(): T | undefined {
+        return this.queue.shift();
+    } // исключить из очереди
+    peek(): T | undefined | null {
+        if (this.queue.length === 0) {
+            return null;
+        }
+        return this.queue[0];
+    } // посмотреть первый элемент
+    isEmpty(): boolean {
+        return this.queue.length === 0;
+    } // проверка на "пустоту" сущности
+    length(): number {
+        return this.queue.length;
+    } // проверка на длину
+}
+
+// Стэк - это еще одна структура данных. Проще всего её представить как стопку листов на столе
+// Последний, который вы положите сверху, вы и первым потом возьмете.
+// Чуть подробнее можно найти в википедии или на других сайтах по поиску "Стэк структура данных"
+// Класс Stack содержит другие методы, так что ничего имплементировать не нужно
+// Класс может работать с любым типом данных, то есть помещать любые данные в массив и содержит массив любого типа  <-- Важно
+
+class Stack<T> {
+    // Создать приватное свойство stack, которое по умолчанию массив и содержит массив любого типа
+    // Создать приватное свойство limit, которое будет типом number
+
+    // Здесь мы установим лимит на стопку листов.
+    // При переполнении стэка программа зависает, а очень высокая стопка листов падает
+    // Так что лимит всегда должен быть
+    private stack: T[] = [];
+    private limit: number;
+    constructor(limit: number = Number.MAX_VALUE) {
+        this.limit = limit;
     }
 
-    // Метод для рассчета объёма
-    calculateVolume(): void {
-        // Условие
-        if (!this.volume) {
-            // Вычисляем значение ширина * на высоту
-            this.volume = this.width * this.height;
-            // Вывод в консоль
-            console.log(`Объём посылки: ${this.volume}`);
-        } else {
-            console.log(`Объём посылки: ${this.volume}`);
+    push(value: T): void {
+        // Добавляет элемент в стэк
+        // Если стэк переполнен - выбрасывает ошибку (throw new Error)
+        if (this.length() === this.limit) {
+            throw new Error("Stack Overflow");
+        } else if (this.length() < this.limit) {
+            this.stack.push(value);
         }
     }
 
-    // Несколько вариантов значений для метода checkBoxSize (overloading)
-    checkBoxSize(transport: number): string;
-    checkBoxSize(transport: number[]): string;
-    // Метод для проверки размера посылки
-    checkBoxSize(transport: number | number[]): string {
-        // Условие
-        if (typeof transport === "number") {
-            // Проверяем размер ширины бокса (если размер транспорта больше либо равен ширине бокса) выводи "Ok" в плохом случае "Not ok"
-            return transport >= this.width ? "Ok" : "Not ok";
-        } else {
-            // Если хотя бы один транспорт подходит по размеру для бокса то выводим "Ok" в плохом случае "Not ok"
-            return transport.some((t) => t >= this.width) ? "Ok" : "Not ok";
+    pop(): T {
+        // Удаляет последний элемент массива
+        // Если в стеке пусто - выбрасывает ошибку (throw new Error)
+        // При удалении элемента возвращает его
+        // Простыми словами: вы берете верхний лист в стопке и используете его
+        // Если на столе нет листов - получается ошибка, брать нечего
+        if (this.isEmpty()) {
+            throw new Error("Stack Underflow");
         }
+        return this.stack.pop()!;
     }
 
-    // Ассинхронная функция
-    async content(value: string) {
-        const date = await new Date().toTimeString();
-        this._content = `Date: ${date}, Content: ${value}`;
-        // Вывод в консоль
-        console.log(this._content);
-        // return this._content;
+    length() {
+        // Возвращает кол-во элементов в стэке
+        return this.stack.length;
+    }
+
+    isEmpty(): boolean {
+        if (this.stack.length === 0) {
+            return true;
+        } else {
+            return false;
+        }
+        // Проверяет стэк на "пустоту"
+    }
+
+    top(): T | null {
+        // Возвращает последний (верхний) элемент стэка, но не удаляет его
+        // Вы просто читаете, что написано на верхнем листе
+        // Если стэк пуст - вернется null
+        if (this.isEmpty()) {
+            return null;
+        }
+        return this.stack[this.length() - 1]; // Возвращаем последний, не удаляя
     }
 }
 
-// Экземпляр класса
-const firstBox = new Box(250);
-// Устанавливаем значение для объёма
-firstBox.volume = 50000;
+// Для тестов
 
-// Вывод в консоль
-// OK
-console.log(firstBox.checkBoxSize([200, 500]));
-// Not ok
-// console.log(firstBox.checkBoxSize(240));
-// OK
-// console.log(firstBox.checkBoxSize(270));
+const arrTest1 = new ArrayQueue<number>();
+arrTest1.enqueue(5);
+arrTest1.enqueue(10);
+console.log(arrTest1.peek());
+console.log(arrTest1.dequeue());
+console.log(arrTest1.length());
 
-// console.log((firstBox.content = "Test")); // Устанавливаем значение "Test"
-// console.log(firstBox.content); // Обращаемся к свойству для получения содержимого экземпляра content
+const arrTest2 = new ArrayQueue<string>();
+arrTest2.enqueue("5");
+arrTest2.enqueue("10");
+console.log(arrTest2.peek());
+console.log(arrTest2.dequeue());
+console.log(arrTest2.length());
 
-class PresentBox extends Box {
-    wrap: string;
-    height: number = 600; // присваиваем значение в 600
+const stackTest1 = new Stack<number>(10);
+stackTest1.push(20);
+stackTest1.push(50);
+console.log(stackTest1.top());
+console.log(stackTest1.pop());
+console.log(stackTest1.length());
 
-    constructor(wrap: string, width: number) {
-        // super() для наследования свойств родительского класса
-        super(width);
-        this.wrap = wrap;
-    }
-
-    // Ассинхронная функция
-    // Переписываем старый метод с помощью override
-    override async content(value: string, text?: string) {
-        const date = await new Date().toTimeString();
-
-        // Условие
-        if (!text) {
-            // Если текста нету, берём значение из родительского класса
-            super.content(value);
-        } else {
-            // Иначе вызываем эту строку
-            this._content = `Date: ${date}, Content: ${value}, Text: ${
-                text ? text : "No text"
-            }`;
-        }
-
-        // Вывод в консоль
-        console.log(this._content);
-        // return this._content;
-    }
-}
-
-// Новый экземпляр класса
-new PresentBox("red", 500).content("TV", "Gift");
-
-// tsc index.ts (команда в терминале для запуска компилятора ts кода)
-// tsc -help (команда в терминале для помощи с настройками)
-// ts-node index.ts (команда для запуска ноды + ts файл -- удобно для быстрого вывода в консоль)
+const stackTest2 = new Stack<string>(10);
+stackTest2.push("20");
+stackTest2.push("50");
+console.log(stackTest2.top());
+console.log(stackTest2.pop());
+console.log(stackTest2.length());
